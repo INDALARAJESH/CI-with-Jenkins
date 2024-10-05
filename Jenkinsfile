@@ -7,8 +7,8 @@ pipeline {
         IMAGE_REPO = "indalarajesh"
         GIT_REPO_NAME = "DevOps_MasterPiece-CD-with-argocd"
         GIT_USER_NAME = "INDALARAJESH"
-        AWS_REGION = "us-west-1" // Set your AWS region
-        EKS_CLUSTER_NAME = "abhi-eks-LD41Ri9k" // Set your EKS cluster name
+        AWS_REGION = "us-east-1" // Set your AWS region
+       // EKS_CLUSTER_NAME = "abhi-eks-LD41Ri9k" // Set your EKS cluster name
     }
 
     tools { 
@@ -108,34 +108,34 @@ pipeline {
             }
         }
 
-        stage('Configure AWS CLI') {
-            steps {
-                script {
-                    withCredentials([
-                        string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'), 
-                        string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')
-                    ]) {
-                        sh '''
-                            aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
-                            aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
-                            aws configure set default.region ${AWS_REGION}
-                        '''
-                    }
-                }
-            }
-        }
+        // stage('Configure AWS CLI') {
+        //     steps {
+        //         script {
+        //             withCredentials([
+        //                 string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'), 
+        //                 string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')
+        //             ]) {
+        //                 sh '''
+        //                     aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+        //                     aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+        //                     aws configure set default.region ${AWS_REGION}
+        //                 '''
+        //             }
+        //         }
+        //     }
+        // }
 
-        stage('Deploy to EKS') {
-            steps {
-                script {
-                    // Configure kubectl to use your EKS cluster
-                    sh "aws eks --region ${AWS_REGION} update-kubeconfig --name ${EKS_CLUSTER_NAME}"
+        // stage('Deploy to EKS') {
+        //     steps {
+        //         script {
+        //             // Configure kubectl to use your EKS cluster
+        //             sh "aws eks --region ${AWS_REGION} update-kubeconfig --name ${EKS_CLUSTER_NAME}"
 
-                    // Deploy to EKS using kubectl
-                    sh 'kubectl apply -f DevOps_MasterPiece-CD-with-argocd/yamls/deployment.yaml'
-                    sh 'kubectl apply -f DevOps_MasterPiece-CD-with-argocd/yamls/service.yaml'
-                }
-            }
-        }
+        //             // Deploy to EKS using kubectl
+        //             sh 'kubectl apply -f DevOps_MasterPiece-CD-with-argocd/yamls/deployment.yaml'
+        //             sh 'kubectl apply -f DevOps_MasterPiece-CD-with-argocd/yamls/service.yaml'
+        //         }
+        //     }
+        // }
     }
 }
